@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="incomingPartsFlowTest">
+    <test verbose="2" preserve-order="true" name="D:/software/JCXFpro/mortgage_loan">
+        <classes>
+            <class name="incomingParts_flow_test.MainSimpleIncomingPartsFlowTest">
+                <methods>
+                    <include name="customRegister"/>
+                    <include name="customRegInfoQuery"/>
+                    <include name="realNameAuth"/>
+                    <include name="preCreditApplySave"/>
+                    <include name="firstRiskCallback"/>
+                    <include name="houseInfoMng"/>
+                    <include name="regMarriageInfo"/>
+                    <include name="addCorrelationPer"/>
+                    <include name="loanChoiceDeadlineQuery"/>
+                    <include name="commitPredictCreditInfo"/>
+                    <include name="afterAllCorrelationAuthCommitCredit"/>
+                    <include name="secondRiskMngCallback"/>
+                    <include name="staySuppAccessoryInfoQuery"/>
+                    <include name="supplementAccessoryInfo"/>
+                </methods>
+            </class>
+
+            <class name="incomingParts_flow_test.SpouseSimpleIncomingPartsFlowTest"/>
+            <class name="incomingParts_flow_test.CorrelationIncomingPartsFlowTest"/>
+
+        </classes>
+    </test>
+</suite>
