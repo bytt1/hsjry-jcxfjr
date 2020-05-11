@@ -7,13 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import utils.Okhttp;
+import utils.SqlUtils;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import static utils.Okhttp.getProVal;
+import static utils.Okhttp.*;
 
 
 public final class PublicFunc {
@@ -25,11 +27,35 @@ public final class PublicFunc {
     private static final String RISK_CALLBACK_URL = DOMAIN + "/v1/risk/riskFirstCallBack";
     private static final String SEC_RICK_MNG_URL = DOMAIN + "/v1/risk/riskSecondCallBack";
     private static final String MAIN_MOBILE_NO = Okhttp.getPhone();
-    public static String getMobileNo(){
-//        return "13417118158";
-        return MAIN_MOBILE_NO;
+    private static final String DATABASE = "dev_credit";
+
+    public static JSONObject getRealNameData() throws IOException {
+        return Okhttp.analysisToJson(Okhttp.doGet("http://10.10.61.77:8081/getTestData"));
     }
 
+    public static String getUserId(String mobileNo) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT user_id FROM dev_user.user_contact_station_info WHERE" +
+                " station_id = (SELECT station_id FROM dev_user.user_telephone_info WHERE" +
+                " telephone = \""+mobileNo+"\" LIMIT 1)\n";
+        return SqlUtils.select(sql);
+    }
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        System.out.println(getUserId("13744421796"));
+    }
+
+    public static String getDatabase(){
+        return  DATABASE;
+    }
+
+    public static String getMobileNo(){
+        return MAIN_MOBILE_NO;
+//        return "13711775766";
+    }
+
+    public static String getCertNo(){
+        return "51102219900101" + fourRandom();
+    }
 
     public static String getProductID(){
         return "F0220";
@@ -277,19 +303,37 @@ public final class PublicFunc {
         return array;
     }
 
+    public static JSONArray loanContract(){
+        JSONObject contract = new JSONObject();
+
+        contract.put("compactId","4199769758219567585");
+        contract.put("compactType","8"); //必传
+
+        JSONArray array = new JSONArray();
+        array.add(contract);
+
+        return array;
+    }
 
 
 
     //联系人列表
     public static JSONArray correlationPerList(){
-        JSONObject list = new JSONObject();
-        list.put("affiliatedType","1");
-        list.put("userName","吴亚洲");
-        list.put("telphoneNo","13628608071");
-        list.put("contactsInformed","1");
+        JSONObject indexOne = new JSONObject();
+        indexOne.put("affiliatedType","03");
+        indexOne.put("userName","隔壁");
+        indexOne.put("telphoneNo",getPhone());
+        indexOne.put("contactsInformed","1");
+
+        JSONObject indexTwo = new JSONObject();
+        indexTwo.put("affiliatedType","08");
+        indexTwo.put("userName","老王");
+        indexTwo.put("telphoneNo",getPhone());
+        indexTwo.put("contactsInformed","1");
 
         JSONArray array = new JSONArray();
-        array.add(list);
+        array.add(indexOne);
+        array.add(indexTwo);
 
         return array;
     }
@@ -297,21 +341,7 @@ public final class PublicFunc {
     //扩展信息列表
     public static JSONObject extendInfoList(){
         JSONObject list = new JSONObject();
-        list.put("liveAddrHourseCertIsSame ","1");
-        list.put("liveProvinceCode","51");
-        list.put("liveCityCode","01");
-        list.put("liveAreaCode","00");
-        list.put("liveAddress","抚琴小区");
-        list.put("workName","锦程消费金融");
-        list.put("workAddrProvinceCode","51");
-        list.put("workAddrCityCode","01");
-        list.put("workAddrAreaCode","00");
-        list.put("workAddrAddress","中航城市广场910");
-        list.put("highestEducation","5");
-        list.put("income","4");
-
-
-
+        list.put("companyPhone","02148888");
         return list;
     }
 

@@ -14,6 +14,7 @@ import utils.SqlUtils;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static data.publicdata.PublicFunc.getDatabase;
 import static data.publicdata.PublicFunc.respAssert;
 
 public class SpouseIncomingPartsFlow {
@@ -33,10 +34,10 @@ public class SpouseIncomingPartsFlow {
                 "\""+mainMobileNo+"\" LIMIT 1)))";
 
         try {
-            correlationInfo = JSON.parseObject(SqlUtils.select(sql,"dev_credit"));
+            correlationInfo = JSON.parseObject(SqlUtils.select(sql));
             mobileNo = correlationInfo.getString("spousePhone");
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -72,7 +73,6 @@ public class SpouseIncomingPartsFlow {
                     spouseRegInfoQuery.getString("userId")
             );
 
-
             json = CustomAuthentication.realNameAuth(realName);
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class SpouseIncomingPartsFlow {
                 " WHERE telephone = \""+mainMobileNo+"\" LIMIT 1))";
         try {
             json = IncomingPartsPort.preCreditApplySave(realName,
-                    SqlUtils.select(sql,"dev_credit"),spouseRegInfoQuery.getString("userId"));
+                    SqlUtils.select(sql),spouseRegInfoQuery.getString("userId"));
             FileUtils.writerIdentityInfo("spousePreCreditApplySave",json.getJSONObject("body"));
         } catch (IOException | SQLException | ClassNotFoundException e) {
             e.printStackTrace();

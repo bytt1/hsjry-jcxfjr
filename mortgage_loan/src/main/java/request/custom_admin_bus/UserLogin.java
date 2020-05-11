@@ -32,7 +32,6 @@ public class UserLogin {
         JSONObject json = Okhttp.analysisToJson(Okhttp.doPost(LOGIN_BY_ACCOUNT_URL,
                 Okhttp.requestBody(UserLoginData.accountLogin(phone,code)).toJSONString()));
         Okhttp.setPro("token",json.getJSONObject("body").getString("token"));
-
         return json;
     }
 
@@ -52,9 +51,9 @@ public class UserLogin {
     }
 
     public static void main(String[] args) throws IOException {
-        loginByAccount("15756240257","123");
+        loginByAccount("13750717265","123456");
 
-//        loginByVerifyCode("15756240257");
+//        loginByVerifyCode("13787838696");
 
 //        System.out.println(PublicFunc.getCode("dev_user_app_log*","15756240257"));
 //        logout();

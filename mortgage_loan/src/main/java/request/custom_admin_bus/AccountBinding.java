@@ -2,9 +2,11 @@ package request.custom_admin_bus;
 
 import com.alibaba.fastjson.JSONObject;
 import data.custom_admin.AccountBindingData;
+import data.publicdata.PublicFunc;
 import utils.Okhttp;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class AccountBinding {
 
@@ -26,9 +28,11 @@ public class AccountBinding {
         ));
     }
     //银行卡绑定
-    public static JSONObject bankCardBind(String account,String code) throws IOException {
+    public static JSONObject bankCardBind(String accountName,String certNo,String account,
+                                          String mobileNo,String tradePwd) throws IOException {
         return Okhttp.analysisToJson(Okhttp.doPost(BANK_CARD_BIND_URL,
-                Okhttp.requestBody(AccountBindingData.bankCardBinding(account, code)).toJSONString()
+                Okhttp.requestBody(AccountBindingData.bankCardBinding(accountName,certNo,account,
+                        mobileNo,tradePwd)).toJSONString()
         ));
     }
 
@@ -48,9 +52,9 @@ public class AccountBinding {
     }
 
     //绑定账户信息查询
-    public static JSONObject bindAccountInfoQuery() throws IOException {
+    public static JSONObject bindAccountInfoQuery(String userId) throws IOException {
         return Okhttp.analysisToJson(Okhttp.doPost(BIND_ACCOUNT_INFO_QUERY_URL,
-                Okhttp.requestBody(AccountBindingData.infoQuery()).toJSONString()
+                Okhttp.requestBody(AccountBindingData.infoQuery(userId)).toJSONString()
         ));
     }
 
@@ -69,14 +73,16 @@ public class AccountBinding {
     }
 
 
-    public static void main(String[] args) throws IOException {
-        bankCardDiscern();
+    public static void main(String[] args) throws IOException, SQLException, ClassNotFoundException {
+//        bankCardDiscern();
 
 //        PublicFunc.identityCode("001","13511111169");
-//        bankCardBind("6217995530006513540","501224","5A43D3A48F09404AA9E6335A646542AD");
-//        accountUnbind("RES1","124805","5A43D3A48F09404AA9E6335A646542AD");
+//        bankCardBind("引启眯","198145199001012410",
+//                "6217004220042538946","13750717265","");
+//        accountUnbind("RES1","124805");
 //        bindPrimaryAccount("RES1","124805","5A43D3A48F09404AA9E6335A646542AD");
-//        bindAccountInfoQuery("5A43D3A48F09404AA9E6335A646542AD");
+        UserLogin.loginByAccount("13751516635","123456");
+        bindAccountInfoQuery(PublicFunc.getUserId("13724488779"));
 //        listQuery();
 //        bankCardInfoQuery("6217995530006513540","5A43D3A48F09404AA9E6335A646542AD");
 

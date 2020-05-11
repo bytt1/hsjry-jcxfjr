@@ -8,12 +8,15 @@ import utils.Okhttp;
 
 public class IncomingPartsData {
 
-    private static JSONObject publicField = PublicFunc.interfacePublicField("");
+
 
 
     //共同借款进度查询
-    public static JSONObject coBorApplyScheduleQuery(){
-        return publicField;
+    public static JSONObject coBorApplyScheduleQuery(String userId){
+        JSONObject json = new JSONObject();
+        json.put("userId",userId);
+        json.put("thirdUserId","");
+        return json;
     }
 
     //预授信申请保存
@@ -80,8 +83,8 @@ public class IncomingPartsData {
         pre.put("pmtAddrCityCode","231000");
         pre.put("pmtAddrAreaCode","231025");
         pre.put("pmtAddress", identityDiscernResp.getString("pmtAddress"));
-        pre.put("officerCardNumber",""); //军官证
-        pre.put("usedName", identityDiscernResp.getString("usedName")); //曾用姓名
+        pre.put("officerCardNumber",Okhttp.fourRandom()); //军官证
+        pre.put("usedName", identityDiscernResp.getString("userName")); //曾用姓名
         pre.put("compactList",PublicFunc.contract());
         pre.put("attachments", PublicFunc.attachments());
         pre.put("extraData",new JSONObject());
@@ -91,15 +94,17 @@ public class IncomingPartsData {
 
     //房产信息管理
     public static JSONObject houseInfoManager(String creditApplyId){
-        JSONObject house = publicField;
+        JSONObject house = new JSONObject();
+        house.put("userId","");
+        house.put("thirdUserId","");
         house.put("creditApplyId",creditApplyId);
-        house.put("ownershipCertificateId",Okhttp.fourRandom()); //房屋产权证号
+        house.put("ownershipCertificateId",Okhttp.fourRandom() + Okhttp.withinSixHundred()); //房屋产权证号
         house.put("ownHouseFlag","1"); //是否本人房产
         house.put("provinceCode","230000");
         house.put("cityCode","231000");
         house.put("areaCode","231025");
         house.put("address","黑龙江省牡丹江市");
-        house.put("villageName","楼盘名java");
+        house.put("villageName","hch楼盘");
         house.put("usableArea","120");
         house.put("housingProperty","02"); //房产性质
         house.put("sequenceOfMortgage","01"); //顺位信息
@@ -111,23 +116,26 @@ public class IncomingPartsData {
 
     //抵押相关信息查询
     public static JSONObject morCorrInfoQuery(String creditApplyId){
-        JSONObject mortgage = publicField;
+        JSONObject mortgage = new JSONObject();
+
         mortgage.put("creditApplyId",creditApplyId);
 
         return mortgage;
     }
 
     //登记婚姻信息
-    public static JSONObject regMarriageInfo(String creditApplyId,String spousePhone){
-        JSONObject reg = publicField;
+    public static JSONObject regMarriageInfo(String creditApplyId,String certNo,String spousePhone,String userId){
+        JSONObject reg = new JSONObject();
+        reg.put("userId",userId);
         reg.put("creditApplyId",creditApplyId);
         reg.put("mobileNo",spousePhone); //必传
         reg.put("marriageStatus","20");
         reg.put("spouseName",Okhttp.getFont(3)); //配偶姓名
-        reg.put("spouseCertNo","32128319790629" +  Okhttp.fourRandom());
+        reg.put("spouseCertNo",certNo);
         reg.put("spouseMobileNo",spousePhone);
         reg.put("coBorrowerFlag","0"); //是否最高借款人
-        reg.put("propertyOwerFlag","1"); //是否产权人
+        reg.put("propertyOwerFlag","0"); //是否产权人
+
 
         FileUtils.writerIdentityInfo("婚姻信息登记",reg);
         return reg;
@@ -135,8 +143,9 @@ public class IncomingPartsData {
 
     //关联人信息查询
     public static JSONObject correlationInfoQuery(String mainCreditApplyId){
-        JSONObject corr = publicField;
-
+        JSONObject corr = new JSONObject();
+        corr.put("userId","");
+        corr.put("thirdUserId","");
         corr.put("mainCreditApplyId",mainCreditApplyId);
         corr.put("duplicateFlag ","1");
 
@@ -144,35 +153,34 @@ public class IncomingPartsData {
     }
 
     //添加关联人
-    public static JSONObject addCorrelationPerson(String mainCrtAlyId,String uid){
-        String spouseCertNo = Okhttp.withinSixHundred() + Okhttp.withinSixHundred() + "19700315" +Okhttp.fourRandom();
-        String corrCertNo = Okhttp.withinSixHundred() + Okhttp.withinSixHundred() + "19700315" +Okhttp.fourRandom();
+    public static JSONObject addCorrelationPerson(String mainCrtAlyId,String certNo,String uid){
 
 
         JSONObject correlation = new JSONObject();
         correlation.put("affiliatedForm","0");  //关联人大类 0共同借款人 1抵押人 2主借人
-        correlation.put("affiliatedType","5");
+        correlation.put("affiliatedType","04");
         correlation.put("marriageStatus","20");
         correlation.put("userName",Okhttp.getFont(3));
-        correlation.put("certificateNo",corrCertNo);
+        correlation.put("certificateNo",certNo);
         correlation.put("mortgagorSign","1"); //是否产权人
         correlation.put("spouseName",Okhttp.getFont(3));
-        correlation.put("spouseCertificateNo",spouseCertNo);
-        correlation.put("spouseAffiliatedType","5"); //关联关系
+        correlation.put("spouseCertificateNo",PublicFunc.getCertNo());
+        correlation.put("spouseAffiliatedType","05"); //关联关系
         correlation.put("spouseIsCoBorrower","0");  //是否标识 0否 1是
-        correlation.put("spouseMortgagorSign","1");
+        correlation.put("spouseMortgagorSign","0");
 
         JSONArray array = new JSONArray();
         array.add(correlation);
 
-        JSONObject person = publicField;
-
+        JSONObject person = new JSONObject();
+        person.put("userId","");
+        person.put("thirdUserId","");
         person.put("mainBorrowerApplyId",mainCrtAlyId);
         person.put("mainBorrowerId",uid);
         person.put("dataList",array);
 
 
-        FileUtils.writerIdentityInfo("userName",person);
+        FileUtils.writerIdentityInfo("添加关联人",person);
         return person;
     }
 
@@ -192,8 +200,9 @@ public class IncomingPartsData {
         JSONArray array = new JSONArray();
         array.add(correlation);
 
-        JSONObject person = publicField;
-
+        JSONObject person = new JSONObject();
+        person.put("userId","");
+        person.put("thirdUserId","");
         person.put("mainBorrowerApplyId","000CA2020040000000308");
         person.put("mainBorrowerId","000UC020000729830");
         person.put("dataList",array);
@@ -204,8 +213,9 @@ public class IncomingPartsData {
 
     //删除关联人
     public static JSONObject deleteCorrelationPerson(String CreditApplyId,String corrId){
-        JSONObject del = publicField;
-
+        JSONObject del = new JSONObject();
+        del.put("userId","");
+        del.put("thirdUserId","");
         del.put("mainCreditApplyId",CreditApplyId);
         del.put("affiliatedId",corrId); //关联编号
 
@@ -215,8 +225,9 @@ public class IncomingPartsData {
     //提交预授信信息
     public static JSONObject commitPreCreditInfo(String creditApplyId,float amount,
                                                  String loanPeriod){
-        JSONObject commit = publicField;
-
+        JSONObject commit = new JSONObject();
+        commit.put("userId","");
+        commit.put("thirdUserId","");
         commit.put("merchantId",Okhttp.getPropertiesVal("merchantId"));
         commit.put("storeId",Okhttp.getPropertiesVal("storeId"));
         commit.put("creditApplyId",creditApplyId);
@@ -231,8 +242,9 @@ public class IncomingPartsData {
 
     //一抵信息列表查询
     public static JSONObject firstMortgageInfoListQuery(String productId,String mainCreditApplyId){
-        JSONObject query = publicField;
-
+        JSONObject query = new JSONObject();
+        query.put("userId","");
+        query.put("thirdUserId","");
         query.put("productNo",productId);
         query.put("mainCreditApplyId",mainCreditApplyId);
 
@@ -242,8 +254,9 @@ public class IncomingPartsData {
     //其他关联人列表查询
     public static JSONObject otherCorrelationPersonListQuery(String productId,
                                                              String mainCreditApplyId){
-        JSONObject other = publicField;
-
+        JSONObject other = new JSONObject();
+        other.put("userId","");
+        other.put("thirdUserId","");
         other.put("productId",productId);
         other.put("authorityType","01"); //授权类型 01预授信授权 02签署合同授权
         other.put("mainCreditApplyId",mainCreditApplyId);
@@ -258,8 +271,9 @@ public class IncomingPartsData {
                                                        String userName){
         String date = Okhttp.getCurrentDate();
 
-        JSONObject cmt = publicField;
-
+        JSONObject cmt = new JSONObject();
+        cmt.put("userId","");
+        cmt.put("thirdUserId","");
         cmt.put("productId",productId);
         cmt.put("thirdpartId","000UC010000006268");//商户或合作方编号
         cmt.put("storeId",Okhttp.getPropertiesVal("storeId"));
@@ -280,7 +294,9 @@ public class IncomingPartsData {
 
     //待补充附件列表查询
     public static JSONObject staySupplementedAccessoryListQuery(String applyId){
-        JSONObject query = publicField;
+        JSONObject query = new JSONObject();
+        query.put("userId","");
+        query.put("thirdUserId","");
         query.put("applyId",applyId);
 
         return query;
@@ -289,53 +305,100 @@ public class IncomingPartsData {
     //补充资料提交
     public static JSONObject supplementInformationCmt(String productId,String creditApplyId,
                                                       JSONObject realName,String userId,String relationType){
-        JSONObject cmt = publicField;
+        JSONObject cmt = new JSONObject();
+        cmt.put("thirdUserId","");
         cmt.put("userId",userId);
         cmt.put("productId",productId);//
         cmt.put("creditApplyId",creditApplyId);//
         cmt.put("userName",realName.getString("userName"));//
         cmt.put("certificateKind",realName.getString("certType"));//
         cmt.put("certificateNo",realName.getString("certNo"));//
-//        cmt.put("applyCreditAmount",10000.00);
-//        cmt.put("customerManagerId","");
+        cmt.put("applyCreditAmount",200000.00);
+        cmt.put("customerManagerId","");
         cmt.put("merchantId",Okhttp.getProVal("merchantId"));//
         cmt.put("attachments",PublicFunc.staySupplementsInfo(relationType));
-//        cmt.put("extraData",PublicFunc.extendInfoList());
-//        cmt.put("contacts ",PublicFunc.correlationPerList());
-        cmt.put("income",50000);
+        cmt.put("extraData",PublicFunc.extendInfoList());
+        cmt.put("contacts ",PublicFunc.correlationPerList());
+        cmt.put("liveAddrHourseCertIsSame ","1");
+        cmt.put("liveProvinceCode","230000");
+        cmt.put("liveCityCode","231000");
+        cmt.put("liveAreaCode","231025");
+        cmt.put("liveAddress","成都市高升桥264");
+        cmt.put("workName","锦程消费金融");
+        cmt.put("workAddrProvinceCode","230000");
+        cmt.put("workAddrCityCode","231000");
+        cmt.put("workAddrAreaCode","231025");
+        cmt.put("workAddrAddress","中航城市广场910");
+        cmt.put("highestEducation","5");
+        cmt.put("income",20000.00f);
+        cmt.put("companyIndustry","2");
 
 
         return cmt;
     }
 
     //确认借款
-    public static JSONObject confirmLoan(){
-        JSONObject confirm = publicField;
-
-        confirm.put("productId","");
-        confirm.put("mainCreditApplyId","");
-        confirm.put("creditApplyId","");
-        confirm.put("applyAmount",""); //借款本金
-        confirm.put("applyTerm",""); // 必传 借款期限
-        confirm.put("applyTermUnit",""); // 必传  借款期限单位
-        confirm.put("repayMethod","");  // 必传 还款方式
-        confirm.put("loanPurpose","");
-        confirm.put("repayDay","");
-        confirm.put("collectionRepaymentCardNo","");
-        confirm.put("payLoanAccountId","");
+    public static JSONObject confirmLoan(String maiCreditApplyId,String creditApplyId,String bankCard,String userId){
+        JSONObject confirm = new JSONObject();
+        confirm.put("userId",userId);
+        confirm.put("thirdUserId","");
+        confirm.put("productId",PublicFunc.getProductID());
+        confirm.put("mainCreditApplyId",maiCreditApplyId);
+        confirm.put("creditApplyId",creditApplyId);
+        confirm.put("applyAmount",10000.00); //借款本金
+        confirm.put("applyTerm",12); // 必传 借款期限
+        confirm.put("applyTermUnit","4"); // 必传  借款期限单位
+        confirm.put("repayMethod","1");  // 必传 还款方式
+        confirm.put("loanPurpose","6");
+        confirm.put("repayDay","12");
+        confirm.put("collectionRepaymentCardNo",bankCard);
+        confirm.put("payLoanAccountId",bankCard);
         confirm.put("customerManagerId","");
-        confirm.put("merchantId","");
-        confirm.put("storeId","");
+        confirm.put("merchantId",Okhttp.getProVal("merchantId"));
+        confirm.put("storeId",Okhttp.getProVal("storeId"));
         confirm.put("attachments",PublicFunc.attachments());
-        confirm.put("compactList",PublicFunc.contract());
+        confirm.put("compactList",PublicFunc.loanContract());
 
         return confirm;
     }
 
+    //合同模板查询
+    public static JSONObject contractModule(String loanApplyId){
+        JSONObject contract = new JSONObject();
+        contract.put("userId","");
+        contract.put("thirdUserId","");
+        contract.put("loanApplyId",loanApplyId);
+
+        return contract;
+    }
+
+    //签署借款合同
+    public static JSONObject signLoanContract(String userId,String loanApplyId,
+                                              String tradePwd,JSONObject preViewContract){
+
+        JSONObject list = new JSONObject();
+        list.put("contractId",preViewContract.getString("contractId"));
+        list.put("contractType",preViewContract.getString("contractType"));
+        list.put("contractUrl",preViewContract.getString("contractUrl"));
+
+        JSONArray array = new JSONArray();
+        array.add(list);
+
+        JSONObject sign = new JSONObject();
+        sign.put("userId",userId);
+        sign.put("thirdUserId","");
+        sign.put("loanApplyId",loanApplyId);
+        sign.put("tradePassword",tradePwd);
+        sign.put("contractList",array);
+
+        return sign;
+    }
+
     //取消借款
     public static JSONObject cancelLoan(){
-        JSONObject cancel = publicField;
-
+        JSONObject cancel = new JSONObject();
+        cancel.put("userId","");
+        cancel.put("thirdUserId","");
         cancel.put("productNo","");
         cancel.put("mainCreditApplyId","");
 
@@ -344,8 +407,9 @@ public class IncomingPartsData {
 
     //待补签合同信息查询
     public static JSONObject staySupplementContractInfoQuery(){
-        JSONObject sup = publicField;
-
+        JSONObject sup = new JSONObject();
+        sup.put("userId","");
+        sup.put("thirdUserId","");
         sup.put("productId","");
 
         return sup;
@@ -353,8 +417,9 @@ public class IncomingPartsData {
 
     //补签合同
     public static JSONObject supplementarySignatureContract(){
-        JSONObject signature = publicField;
-
+        JSONObject signature = new JSONObject();
+        signature.put("userId","");
+        signature.put("thirdUserId","");
         signature.put("productId","");
         signature.put("compactList",PublicFunc.contract());;
 
@@ -363,8 +428,9 @@ public class IncomingPartsData {
 
     //关联人合同签署授权
     public static JSONObject corrContractSignatureAuth(){
-        JSONObject conSign = publicField;
-
+        JSONObject conSign = new JSONObject();
+        conSign.put("userId","");
+        conSign.put("thirdUserId","");
         conSign.put("productId","");
         conSign.put("creditApplyId","");
         conSign.put("affiliateLoanApplyId","");//支用申请id
@@ -400,13 +466,17 @@ public class IncomingPartsData {
 
     //客户绑定账户信息查询
     public static JSONObject customBindingAccountInfoQuery(){
-        return publicField;
+        JSONObject json = new JSONObject();
+        json.put("userId","");
+        json.put("thirdUserId","");
+        return json;
     }
 
     //房管局列表查询
     public static JSONObject deptOfHousingManagementListQuery(){
-        JSONObject dept = publicField;
-
+        JSONObject dept = new JSONObject();
+        dept.put("userId","");
+        dept.put("thirdUserId","");
         dept.put("mainCreditApplyId","");
         dept.put("creditApplyId","");
         dept.put("deptOfHousingMgtId","");
@@ -421,8 +491,9 @@ public class IncomingPartsData {
 
     //贷款可选期限查询
     public static JSONObject loanSelectableDeadlineQuery(String mainApplyId,String creditApplyId){
-        JSONObject deadline = publicField;
-
+        JSONObject deadline = new JSONObject();
+        deadline.put("userId","");
+        deadline.put("thirdUserId","");
         deadline.put("mainCreditApplyId",mainApplyId);
         deadline.put("creditApplyId",creditApplyId);
 
@@ -431,8 +502,9 @@ public class IncomingPartsData {
 
     //开具结清证明
     public static JSONObject settleProve(){
-        JSONObject prove = publicField;
-
+        JSONObject prove = new JSONObject();
+        prove.put("userId","");
+        prove.put("thirdUserId","");
         prove.put("email","");
         prove.put("productId",""); // 必传
         prove.put("tradePassword",""); // 必传
@@ -454,8 +526,9 @@ public class IncomingPartsData {
         JSONArray array = new JSONArray();
         array.add(attachments);
 
-        JSONObject upload = publicField;
-
+        JSONObject upload = new JSONObject();
+        upload.put("userId","");
+        upload.put("thirdUserId","");
         upload.put("loanInvoiceId","");
         upload.put("attachments",array);
 

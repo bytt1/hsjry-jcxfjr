@@ -112,10 +112,10 @@ public class PasswordAdmin {
 //        PublicFunc.identityCode("001","13511111169");
 //        resetPassword("0","15756240257",
 //                null,"123");
-//        setTradePassword("trade123456");
+        setTradePassword("245253");
 //        editTradePassword();
 //        resetTradePassword("807107","newTrade123","2BB067779A494C6397176344E8622F6A");
-        loginInfoQuery();
+//        loginInfoQuery();
 //        verifyTradePassword("","");
     }
 }

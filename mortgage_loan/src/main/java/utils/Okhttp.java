@@ -207,7 +207,7 @@ public class Okhttp {
      * 创建随机电话号
      * **/
     public static String getPhone(){
-        return "157" + fourRandom() + fourRandom();
+        return "137" + fourRandom() + fourRandom();
     }
 
     /**

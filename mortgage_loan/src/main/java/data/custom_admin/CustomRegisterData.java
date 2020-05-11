@@ -27,44 +27,52 @@ public class CustomRegisterData {
 
 
     //个人客户信息修改
-    public static JSONObject editInfo(){
+    public static JSONObject editInfo(String userId){
 
-        JSONObject contacts = new JSONObject();
-        contacts.put("relation","7"); //  关系类型
-        contacts.put("name","联系人姓名java"); //  联系人姓名
-        contacts.put("certificateType","0"); //  联系人证件类型  0身份证 3军官证
-        contacts.put("certificateNo","360424199202221613"); //  联系人证件号码
-        contacts.put("mobileNo","13758085676"); //  联系人手机号码
+        JSONObject indexOne = new JSONObject();
+        indexOne.put("relation","7"); //  关系类型
+        indexOne.put("name","hch联系人1"); //  联系人姓名
+        indexOne.put("certificateType","0"); //  联系人证件类型  0身份证 3军官证
+        indexOne.put("certificateNo",PublicFunc.getCertNo()); //  联系人证件号码
+        indexOne.put("mobileNo",Okhttp.getPhone()); //  联系人手机号码
+
+        JSONObject indexTwo = new JSONObject();
+        indexTwo.put("relation","7"); //  关系类型
+        indexTwo.put("name","hch联系人2"); //  联系人姓名
+        indexTwo.put("certificateType","0"); //  联系人证件类型  0身份证 3军官证
+        indexTwo.put("certificateNo",PublicFunc.getCertNo()); //  联系人证件号码
+        indexTwo.put("mobileNo",Okhttp.getPhone()); //  联系人手机号码
 
         JSONArray array = new JSONArray();
-        array.add(contacts);
+        array.add(indexOne);
+        array.add(indexTwo);
 
-        JSONObject edit = publicField;
-
+        JSONObject edit = new JSONObject();
+        edit.put("userId",userId);
         edit.put("gender","1"); //  1男  2女
         edit.put("education","5"); //
         edit.put("monthSalary",10000); //
-        edit.put("marriageStatus","10"); //  婚姻状况  10未婚 20已婚 21初婚 22再婚 23复婚 24有子女 25无子女 30丧偶 40离异 99其他
+        edit.put("marriageStatus","20"); //  婚姻状况  10未婚 20已婚 21初婚 22再婚 23复婚 24有子女 25无子女 30丧偶 40离异 99其他
         edit.put("childrenStatus","1"); //  1无 2有 3求学 4工作
-        edit.put("pmtAddrProvinceCode","51"); // 户籍省份代码
-        edit.put("pmtAddrCityCode","01"); //  户籍城市代码
-        edit.put("pmtAddrAreaCode","510100"); //  户籍地区代码
+        edit.put("pmtAddrProvinceCode","230000"); // 户籍省份代码
+        edit.put("pmtAddrCityCode","231000"); //  户籍城市代码
+        edit.put("pmtAddrAreaCode","231025"); //  户籍地区代码
         edit.put("pmtAddress","抚琴小区java"); // 户籍详细地址
-        edit.put("liveProvinceCode","51"); //  居住省份代码
-        edit.put("liveCityCode","01"); //  居住城市代码
-        edit.put("liveAreaCode","510100"); //  居住地区代码
+        edit.put("liveProvinceCode","230000"); //  居住省份代码
+        edit.put("liveCityCode","231000"); //  居住城市代码
+        edit.put("liveAreaCode","231025"); //  居住地区代码
         edit.put("liveAddress","抚琴小区java"); //   居住详细地址
         edit.put("houseType","A"); //   住宅类型 A经济适用房
         edit.put("houseState","0"); //  住宅状况
-        edit.put("houseProvinceCode","51"); //  住宅省份代码
-        edit.put("houseCityCode","01"); //   住宅城市代码
-        edit.put("houseAreaCode","510100"); //   住宅区域代码
+        edit.put("houseProvinceCode","230000"); //  住宅省份代码
+        edit.put("houseCityCode","231000"); //   住宅城市代码
+        edit.put("houseAreaCode","231025"); //   住宅区域代码
         edit.put("houseAddress","抚琴小区java"); //   住宅地址
         edit.put("workName","锦程消费金融java"); //   单位名称
         edit.put("industryType","1"); //  单位性质
-        edit.put("workAddrProvinceCode","51"); //   单位省份代码
-        edit.put("workAddrCityCode","01"); //  单位城市代码
-        edit.put("workAddrAreaCode","510100"); //  单位地区代码
+        edit.put("workAddrProvinceCode","230000"); //   单位省份代码
+        edit.put("workAddrCityCode","231000"); //  单位城市代码
+        edit.put("workAddrAreaCode","231025"); //  单位地区代码
         edit.put("workAddrAddress","高新区中航城市广场java"); //  单位地址
         edit.put("email","1375808564@qq.com"); //  个人电子邮箱
         edit.put("bakMobileNo","13177482453"); //  备用手机号码

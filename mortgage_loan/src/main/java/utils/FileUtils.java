@@ -45,8 +45,8 @@ public class FileUtils {
             writer = new OutputStreamWriter(new FileOutputStream(filePath,true),
                     StandardCharsets.UTF_8);
             writer.append("\r");
-            writer.append(format.format(new Date()));
-            writer.write(keyName + " = " + json.toJSONString());
+            writer.append("\r");
+            writer.write(keyName + " [ "+ format.format(new Date()) + " ]" + json.toJSONString());
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();

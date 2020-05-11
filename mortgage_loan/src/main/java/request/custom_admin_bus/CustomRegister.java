@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import data.custom_admin.CustomRegisterData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.FileUtils;
 import utils.Okhttp;
 
 import java.io.IOException;
@@ -19,30 +20,31 @@ public class CustomRegister {
     private static final String RESERVED_URL = DOMAIN + "/v1/customer/saveReservedInfo";
     private static final String INFO_LOGOUT_URL = DOMAIN + "/v1/login/delCustInfo";
     private static final String VERIFY_IDENTITY_URL = DOMAIN + "/v1/customer/checkCert";
-    private static final String PHONE = Okhttp.getPropertiesVal("phone");
 
 
 
     public static JSONObject register(String mobileNo) throws IOException {
+        JSONObject data = Okhttp.requestBody(CustomRegisterData.regLogin(mobileNo));
+        FileUtils.writerIdentityInfo("register",data);
         JSONObject json = Okhttp.analysisToJson(Okhttp.doPost(REG_URL,
-                Okhttp.requestBody(CustomRegisterData.regLogin(mobileNo)).toJSONString()));
+                data.toJSONString()));
+
         Okhttp.setPro("token",json.getJSONObject("body").getString("token"));
         return json;
     }
 
 
     //修改客户信息
-    public static JSONObject editInfo() throws IOException {
+    public static JSONObject editInfo(String userId) throws IOException {
         return Okhttp.analysisToJson(Okhttp.doPost(EDIT_URL,
-                Okhttp.requestBody(CustomRegisterData.editInfo()).toJSONString()));
+                Okhttp.requestBody(CustomRegisterData.editInfo(userId)).toJSONString()));
     }
 
     //修改手机号  token传公参  未完成
     public static JSONObject editPhone(String phone,String code) throws IOException {
-        JSONObject json = Okhttp.analysisToJson(Okhttp.doPost(EDITPHONE_URL,
-                Okhttp.requestBody(CustomRegisterData.editPhone(phone,code)).toJSONString()));
 
-        return json;
+        return Okhttp.analysisToJson(Okhttp.doPost(EDITPHONE_URL,
+                Okhttp.requestBody(CustomRegisterData.editPhone(phone,code)).toJSONString()));
     }
 
     //设置头像
@@ -73,8 +75,8 @@ public class CustomRegister {
 
 
     public static void main(String[] args) throws IOException {
-        register("15756240258");
-//        editInfo();
+//        register("15756240258");
+        editInfo("000UC020000853220");
 //        editPhone();
 //        imgSet();
 //        reservedInfoSet();

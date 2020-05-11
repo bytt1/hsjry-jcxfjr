@@ -22,10 +22,8 @@ public class CustomQuery {
     //客户注册信息查询
     public static JSONObject regInfoQuery(String identifier) throws IOException {
 
-        JSONObject json = Okhttp.analysisToJson(Okhttp.doPost(REGISTER_INFO_QUERY,
+        return Okhttp.analysisToJson(Okhttp.doPost(REGISTER_INFO_QUERY,
                 Okhttp.requestBody(CustomQueryData.registerQuery(identifier)).toJSONString()));
-
-        return json;
     }
 
     public static void main(String[] args) throws IOException {

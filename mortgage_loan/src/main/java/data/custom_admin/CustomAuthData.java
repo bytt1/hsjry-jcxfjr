@@ -54,10 +54,10 @@ public class CustomAuthData {
     }
 
     //人脸识别
-    public static JSONObject faceIdentity(JSONObject identityDiscernResp){
+    public static JSONObject faceIdentity(JSONObject identityDiscernResp,String userId){
 
-        JSONObject face = publicField;
-
+        JSONObject face = new JSONObject();
+        face.put("userId",userId);
         face.put("name", identityDiscernResp.getString("userName"));   // 必传
         face.put("certNo", identityDiscernResp.getString("certNo"));   // 必传
         face.put("callBackUrl", "http://www.baidu.com");   //    必传
@@ -87,8 +87,10 @@ public class CustomAuthData {
     }
 
     //人脸识别 认证结果查询
-    public static JSONObject faceDiscernQuery(){
-        return publicField;
+    public static JSONObject faceDiscernQuery(String userId){
+        JSONObject result = new JSONObject();
+        result.put("userId",userId);
+        return result;
     }
 
     //认证状态查询
